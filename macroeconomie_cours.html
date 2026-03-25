@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours de Macroéconomie</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink: #1a1a2e;
+    --cream: #f7f4ef;
+    --accent: #c8382a;
+    --gold: #b8960c;
+    --blue: #1e4d8c;
+    --teal: #1a6b5a;
+    --light-gray: #edeae4;
+    --border: #d4cfc6;
+    --formula-bg: #f0eeea;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 60px,
+      rgba(255,255,255,0.03) 60px,
+      rgba(255,255,255,0.03) 61px
+    );
+  }
+  header .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+  header h1 em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  header p {
+    font-weight: 300;
+    font-size: 1.05rem;
+    max-width: 640px;
+    margin: 0 auto;
+    opacity: 0.85;
+  }
+
+  /* ─── NAVIGATION ─── */
+  nav {
+    background: white;
+    border-bottom: 3px solid var(--accent);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  nav ul {
+    display: flex;
+    list-style: none;
+    overflow-x: auto;
+    padding: 0 1rem;
+    gap: 0;
+  }
+  nav ul li a {
+    display: block;
+    padding: 1rem 1.1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: all 0.2s;
+  }
+  nav ul li a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ─── LAYOUT ─── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 3.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--light-gray);
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--blue);
+    margin: 2rem 0 0.75rem;
+  }
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--teal);
+    margin: 1.5rem 0 0.5rem;
+  }
+  p { margin-bottom: 1rem; }
+
+  /* ─── FORMULAS ─── */
+  .formula-box {
+    background: var(--formula-bg);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .formula-box .formula-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .formula-box .formula {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .formula-box .formula-desc {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.88rem;
+    color: #555;
+    margin-top: 0.5rem;
+  }
+
+  /* ─── STAT CARDS ─── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .stat-card .number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .stat-card .label {
+    font-size: 0.82rem;
+    color: #666;
+    line-height: 1.3;
+  }
+  .stat-card .source {
+    font-size: 0.68rem;
+    color: #aaa;
+    margin-top: 0.4rem;
+    font-style: italic;
+  }
+
+  /* ─── CHARTS ─── */
+  .chart-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .chart-wrap .chart-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: var(--ink);
+  }
+  .chart-wrap .chart-source {
+    font-size: 0.72rem;
+    color: #999;
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
+  .chart-wrap canvas {
+    max-height: 320px;
+  }
+
+  /* ─── DEFINITION BOXES ─── */
+  .def-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--blue);
+    border-radius: 0 0 8px 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.2rem 0;
+  }
+  .def-box strong {
+    color: var(--blue);
+    font-size: 0.95rem;
+  }
+
+  /* ─── COMPARISON TABLE ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  thead th {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 0.9rem 1rem;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  tbody tr:nth-child(even) { background: var(--light-gray); }
+  tbody td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    display: flex;
+    gap: 1rem;
+    background: #fff8e1;
+    border: 1px solid #f0d060;
+    border-radius: 8px;
+    padding: 1.1rem 1.3rem;
+    margin: 1.5rem 0;
+    align-items: flex-start;
+  }
+  .callout .icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .callout p { margin: 0; font-size: 0.92rem; }
+
+  .callout.green {
+    background: #e8f5e9;
+    border-color: #a5d6a7;
+  }
+  .callout.red {
+    background: #fdecea;
+    border-color: #f5a0a0;
+  }
+  .callout.blue {
+    background: #e3f2fd;
+    border-color: #90caf9;
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline {
+    border-left: 3px solid var(--accent);
+    margin: 1.5rem 0;
+    padding-left: 1.5rem;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.85rem;
+    top: 0.3rem;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .timeline-item .year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── MODEL COMPARE ─── */
+  .model-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 640px) { .model-grid { grid-template-columns: 1fr; } }
+  .model-card {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .model-card .model-header {
+    padding: 1rem 1.2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+  }
+  .model-card.classical .model-header { background: var(--blue); }
+  .model-card.keynesian .model-header { background: var(--teal); }
+  .model-card .model-body {
+    padding: 1rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  .model-card .model-body ul {
+    padding-left: 1.2rem;
+    margin-top: 0.5rem;
+  }
+  .model-card .model-body li { margin-bottom: 0.4rem; }
+
+  /* ─── TOC ─── */
+  .toc {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .toc h3 { margin-top: 0; color: var(--ink); font-size: 1rem; }
+  .toc ol { padding-left: 1.4rem; }
+  .toc li { margin-bottom: 0.35rem; font-size: 0.92rem; }
+  .toc a { color: var(--blue); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--ink);
+    color: var(--cream);
+    text-align: center;
+    padding: 2.5rem 1rem;
+    font-size: 0.85rem;
+    opacity: 0.9;
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* ─── SVG DIAGRAM ─── */
+  .diagram-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    text-align: center;
+  }
+  .diagram-wrap .diagram-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+    text-align: left;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .container { padding: 0 1rem; }
+    section { padding: 2rem 0; }
+    nav ul li a { padding: 0.8rem 0.7rem; font-size: 0.6rem; }
+  }
+
+  /* Badge for new content */
+  .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="subtitle">Cours universitaire · Licence / Master</div>
+  <h1>Macro<em>économie</em></h1>
+  <p>De la mesure de l'activité économique aux grands enjeux du XXI<sup>e</sup> siècle — modèles, mécanismes et données contemporaines.</p>
+</header>
+
+<!-- NAV -->
+<nav>
+  <ul>
+    <li><a href="#notions">① Notions</a></li>
+    <li><a href="#mesure">② Mesure</a></li>
+    <li><a href="#consommation">③ Conso.</a></li>
+    <li><a href="#investissement">④ Invest.</a></li>
+    <li><a href="#marches">⑤ Marchés</a></li>
+    <li><a href="#classique">⑥ Classique</a></li>
+    <li><a href="#keynes">⑦ Keynes</a></li>
+    <li><a href="#enjeux">⑧ Enjeux 2026</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <!-- TABLE DES MATIERES -->
+  <div class="toc">
+    <h3>📋 Table des matières</h3>
+    <ol>
+      <li><a href="#notions">Notions essentielles de macroéconomie</a></li>
+      <li><a href="#mesure">La macroéconomie comme mesure de l'activité économique</a></li>
+      <li><a href="#consommation">La fonction de consommation</a></li>
+      <li><a href="#investissement">La fonction d'investissement</a></li>
+      <li><a href="#marches">Marchés du travail et marché monétaire</a></li>
+      <li><a href="#classique">Le modèle classique</a></li>
+      <li><a href="#keynes">Le modèle keynésien</a></li>
+      <li><a href="#enjeux">Enjeux macroéconomiques du XXI<sup>e</sup> siècle <span class="badge">2026</span></a></li>
+    </ol>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       PARTIE 1 · NOTIONS ESSENTIELLES
+  ══════════════════════════════════════════════ -->
+  <section id="notions">
+    <div class="section-label">Partie I</div>
+    <h2>Notions essentielles de macroéconomie</h2>
+
+    <p>
+      La <strong>macroéconomie</strong> est la branche de l'économie qui étudie le comportement des agrégats économiques — production, emploi, niveau des prix, monnaie — à l'échelle d'une nation ou de l'économie mondiale. Elle s'oppose à la <em>microéconomie</em>, qui analyse les décisions individuelles des agents (ménages, firmes).
+    </p>
+
+    <div class="def-box">
+      <strong>Définition fondamentale</strong><br>
+      La macroéconomie cherche à expliquer comment les décisions décentralisées de millions d'agents se coordonnent (ou non) pour produire des résultats collectifs tels que la croissance, le chômage ou l'inflation.
+    </div>
+
+    <h3>1.1 Les grands agrégats macroéconomiques</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Agrégat</th>
+          <th>Définition</th>
+          <th>Unité</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>PIB</strong></td>
+          <td>Produit Intérieur Brut : valeur ajoutée de tous les biens et services produits sur un territoire pendant une période</td>
+          <td>€ / $ courants ou constants</td>
+        </tr>
+        <tr>
+          <td><strong>PNB / RNB</strong></td>
+          <td>Produit National Brut / Revenu National Brut : revenu des résidents nationaux, quelle que soit leur localisation</td>
+          <td>€ courants</td>
+        </tr>
+        <tr>
+          <td><strong>Inflation (IPC)</strong></td>
+          <td>Hausse générale et durable du niveau des prix, mesurée par l'Indice des Prix à la Consommation</td>
+          <td>% / an</td>
+        </tr>
+        <tr>
+          <td><strong>Taux de chômage</strong></td>
+          <td>Part des actifs sans emploi et en recherche d'emploi (définition BIT)</td>
+          <td>% de la population active</td>
+        </tr>
+        <tr>
+          <td><strong>Solde courant</strong></td>
+          <td>Balance des paiements : exportations − importations + transferts</td>
+          <td>€ ou % du PIB</td>
+        </tr>
+        <tr>
+          <td><strong>Taux d'intérêt</strong></td>
+          <td>Coût du capital emprunté / rendement du capital prêté</td>
+          <td>%</td>
+        </tr>
+        <tr>
+          <td><strong>Masse monétaire (M1/M2/M3)</strong></td>
+          <td>Stock de monnaie disponible dans l'économie selon différentes définitions de liquidité</td>
+          <td>Mds €</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>1.2 Les trois grands courants de pensée</h3>
+    <p>La macroéconomie est traversée par des débats fondateurs entre trois grandes traditions :</p>
+
+    <div class="model-grid">
+      <div class="model-card classical">
+        <div class="model-header">École Classique / Néoclassique</div>
+        <div class="model-body">
+          <ul>
+            <li>Marchés s'auto-régulent (Say, Ricardo, Walras)</li>
+            <li>Neutralité de la monnaie à long terme</li>
+            <li>Plein-emploi naturel</li>
+            <li>Rôle minimal de l'État</li>
+          </ul>
+        </div>
+      </div>
+      <div class="model-card keynesian">
+        <div class="model-header">École Keynésienne</div>
+        <div class="model-body">
+          <ul>
+            <li>Demande globale détermine la production (Keynes, 1936)</li>
+            <li>Équilibres sous-optimaux possibles</li>
+            <li>Rôle actif de la politique budgétaire</li>
+            <li>Court terme crucial</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <div class="icon">📌</div>
+      <p><strong>Courant monétariste (Friedman, Chicago) :</strong> les variations de la masse monétaire sont la principale cause des fluctuations économiques. L'État doit se limiter à une règle de croissance monétaire stable plutôt qu'à une politique discrétionnaire.</p>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       PARTIE 2 · MESURE DE L'ACTIVITÉ
+  ══════════════════════════════════════════════ -->
+  <section id="mesure">
+    <div class="section-label">Partie II</div>
+    <h2>La macroéconomie comme mesure de l'activité économique</h2>
+
+    <p>
+      Mesurer l'activité économique est la première tâche de la macroéconomie appliquée. Le <strong>PIB</strong> est l'indicateur central, mais il coexiste avec de nombreux compléments indispensables.
+    </p>
+
+    <h3>2.1 Le Produit Intérieur Brut (PIB)</h3>
+    <p>Le PIB peut être calculé selon <strong>trois approches équivalentes</strong> :</p>
+
+    <div class="formula-box">
+      <div class="formula-title">Approche production (offre)</div>
+      <div class="formula">PIB = Σ Valeurs Ajoutées Brutes + Taxes sur produits − Subventions</div>
+      <div class="formula-desc">VA = Production − Consommations Intermédiaires. Évite les doubles comptes.</div>
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-title">Approche dépenses (demande)</div>
+      <div class="formula">PIB = C + I + G + (X − M)</div>
+      <div class="formula-desc">
+        C = consommation des ménages | I = investissement (FBCF) | G = dépenses publiques |
+        X = exportations | M = importations
+      </div>
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-title">Approche revenus (répartition)</div>
+      <div class="formula">PIB = Rémunération salariés + EBE + Impôts nets de subventions</div>
+      <div class="formula-desc">EBE = Excédent Brut d'Exploitation (profits + loyers implicites)</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="number">110 000 Mds$</span>
+        <div class="label">PIB mondial (PPA, 2024)</div>
+        <div class="source">FMI – WEO Oct. 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">3,2%</span>
+        <div class="label">Croissance mondiale 2024</div>
+        <div class="source">FMI – WEO Jan. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">+1,1%</span>
+        <div class="label">Croissance Zone Euro 2024</div>
+        <div class="source">Eurostat – fév. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">+1,1%</span>
+        <div class="label">Croissance France 2024</div>
+        <div class="source">INSEE – fév. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">28,8%</span>
+        <div class="label">Part du PIB mondial (USA, nominal, 2024)</div>
+        <div class="source">Banque mondiale, 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">18,3%</span>
+        <div class="label">Part du PIB mondial (Chine, nominal, 2024)</div>
+        <div class="source">Banque mondiale, 2024</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">PIB réel — Croissance annuelle des grandes économies (2019–2024)</div>
+      <div class="chart-source">Sources : FMI WEO Octobre 2024 ; Eurostat ; INSEE (2025)</div>
+      <canvas id="gdpGrowthChart"></canvas>
+    </div>
+
+    <h3>2.2 PIB nominal vs. PIB réel et déflateur du PIB</h3>
+
+    <div class="formula-box">
+      <div class="formula-title">Déflateur du PIB</div>
+      <div class="formula">Déflateur = (PIB nominal / PIB réel) × 100</div>
+      <div class="formula-desc">Permet d'éliminer l'effet des prix et de mesurer la croissance « en volume ».</div>
+    </div>
+
+    <div class="callout">
+      <div class="icon">⚠️</div>
+      <p><strong>Limites du PIB :</strong> il ne mesure ni les inégalités, ni le bien-être subjectif, ni la dégradation environnementale. D'où l'essor d'indicateurs complémentaires : IDH (PNUD), Indice de Bien-Être (OCDE), IPIB (croissance verte), empreinte carbone du PIB.</p>
+    </div>
+
+    <h3>2.3 L'inflation et sa mesure</h3>
+    <p>
+      L'inflation est mesurée par l'<strong>IPC (Indice des Prix à la Consommation)</strong> qui suit l'évolution d'un panier de biens représentatif. En zone euro, l'<em>IPCH</em> (Indice des Prix à la Consommation Harmonisé) permet les comparaisons entre États membres.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Taux d'inflation annuel</div>
+      <div class="formula">π<sub>t</sub> = (IPC<sub>t</sub> − IPC<sub>t−1</sub>) / IPC<sub>t−1</sub> × 100</div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Inflation IPCH — Zone Euro vs. États-Unis (2019–2024)</div>
+      <div class="chart-source">Sources : Eurostat ; US Bureau of Labor Statistics (BLS) – données mensuelles agrégées annuellement, 2025</div>
+      <canvas id="inflationChart"></canvas>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="number">2,4%</span>
+        <div class="label">Inflation Zone Euro (IPCH, déc. 2024)</div>
+        <div class="source">Eurostat – jan. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">2,9%</span>
+        <div class="label">Inflation États-Unis (IPC, déc. 2024)</div>
+        <div class="source">BLS – jan. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">1,3%</span>
+        <div class="label">Inflation France (IPC, déc. 2024)</div>
+        <div class="source">INSEE – jan. 2025</div>
+      </div>
+    </div>
+
+    <h3>2.4 La comptabilité nationale</h3>
+    <p>La comptabilité nationale (Système de Comptabilité Nationale — SCN) organise les flux entre les <strong>cinq secteurs institutionnels</strong> : ménages, sociétés non financières, sociétés financières, administrations publiques, et reste du monde.</p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-title">Le circuit économique simplifié</div>
+      <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;width:100%;">
+        <!-- Firms box -->
+        <rect x="50" y="120" width="160" height="80" rx="8" fill="#1e4d8c" />
+        <text x="130" y="155" text-anchor="middle" fill="white" font-family="Playfair Display, serif" font-size="14" font-weight="700">Entreprises</text>
+        <text x="130" y="172" text-anchor="middle" fill="#adc8f0" font-family="Source Sans 3, sans-serif" font-size="11">(Production)</text>
+
+        <!-- Households box -->
+        <rect x="490" y="120" width="160" height="80" rx="8" fill="#1a6b5a" />
+        <text x="570" y="155" text-anchor="middle" fill="white" font-family="Playfair Display, serif" font-size="14" font-weight="700">Ménages</text>
+        <text x="570" y="172" text-anchor="middle" fill="#a3d8ce" font-family="Source Sans 3, sans-serif" font-size="11">(Revenus)</text>
+
+        <!-- State box -->
+        <rect x="270" y="220" width="160" height="70" rx="8" fill="#7b3f00" />
+        <text x="350" y="250" text-anchor="middle" fill="white" font-family="Playfair Display, serif" font-size="13" font-weight="700">État</text>
+        <text x="350" y="268" text-anchor="middle" fill="#f5c08a" font-family="Source Sans 3, sans-serif" font-size="11">(Redistribution)</text>
+
+        <!-- Banks box -->
+        <rect x="270" y="20" width="160" height="70" rx="8" fill="#c8382a" />
+        <text x="350" y="50" text-anchor="middle" fill="white" font-family="Playfair Display, serif" font-size="13" font-weight="700">Banques</text>
+        <text x="350" y="68" text-anchor="middle" fill="#f5c0bc" font-family="Source Sans 3, sans-serif" font-size="11">(Financement)</text>
+
+        <!-- Arrow: Firms → Households (Salaires) -->
+        <line x1="210" y1="150" x2="490" y2="150" stroke="#b8960c" stroke-width="2" marker-end="url(#arr)"/>
+        <text x="350" y="143" text-anchor="middle" fill="#b8960c" font-family="Source Sans 3, sans-serif" font-size="11" font-weight="600">Salaires &amp; revenus</text>
+
+        <!-- Arrow: Households → Firms (Consommation) -->
+        <line x1="490" y1="175" x2="210" y2="175" stroke="#1a6b5a" stroke-width="2" marker-end="url(#arr2)"/>
+        <text x="350" y="195" text-anchor="middle" fill="#1a6b5a" font-family="Source Sans 3, sans-serif" font-size="11" font-weight="600">Consommation</text>
+
+        <!-- Arrow: Firms → State -->
+        <line x1="160" y1="200" x2="290" y2="230" stroke="#7b3f00" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="200" y="228" fill="#7b3f00" font-family="Source Sans 3, sans-serif" font-size="10">Cotisations</text>
+
+        <!-- Arrow: State → Households -->
+        <line x1="430" y1="225" x2="540" y2="205" stroke="#7b3f00" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="490" y="222" fill="#7b3f00" font-family="Source Sans 3, sans-serif" font-size="10">Transfers.</text>
+
+        <!-- Arrow: Households → Banks -->
+        <line x1="570" y1="120" x2="420" y2="90" stroke="#c8382a" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="510" y="95" fill="#c8382a" font-family="Source Sans 3, sans-serif" font-size="10">Épargne</text>
+
+        <!-- Arrow: Banks → Firms -->
+        <line x1="270" y1="65" x2="160" y2="130" stroke="#c8382a" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="175" y="88" fill="#c8382a" font-family="Source Sans 3, sans-serif" font-size="10">Crédit</text>
+
+        <!-- Arrow markers -->
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#b8960c"/>
+          </marker>
+          <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#1a6b5a"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       PARTIE 3 · FONCTION DE CONSOMMATION
+  ══════════════════════════════════════════════ -->
+  <section id="consommation">
+    <div class="section-label">Partie III</div>
+    <h2>La fonction de consommation</h2>
+
+    <p>
+      La consommation (C) représente la part du revenu disponible des ménages consacrée à l'achat de biens et services. Elle constitue en moyenne <strong>55 à 65 % du PIB</strong> dans les économies développées, ce qui en fait le principal moteur de la demande agrégée.
+    </p>
+
+    <h3>3.1 La loi psychologique fondamentale de Keynes</h3>
+    <p>
+      Dans la <em>Théorie Générale</em> (1936), Keynes pose une loi empirique simple : les ménages consomment une fraction de chaque euro de revenu supplémentaire, mais cette fraction est <em>inférieure à 1</em> — ils en épargnent une partie.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Fonction de consommation keynésienne (forme linéaire)</div>
+      <div class="formula">C = c₀ + c₁ × Yd</div>
+      <div class="formula-desc">
+        c₀ = consommation autonome (indépendante du revenu) ≥ 0<br>
+        c₁ = Propension Marginale à Consommer (PMC) = ΔC/ΔYd ∈ [0, 1]<br>
+        Yd = revenu disponible = Revenu brut − Impôts + Transferts
+      </div>
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-title">Propension Marginale à Épargner (PME)</div>
+      <div class="formula">PME = 1 − PMC = ΔS/ΔYd</div>
+      <div class="formula-desc">Vérification : PMC + PME = 1 (le revenu est soit consommé, soit épargné)</div>
+    </div>
+
+    <div class="callout green">
+      <div class="icon">📊</div>
+      <p><strong>Données empiriques :</strong> En France, la PMC de long terme est estimée autour de <strong>0,85</strong> (INSEE). En 2024, le taux d'épargne des ménages français s'établissait à <strong>18,2 %</strong> du revenu disponible brut (INSEE, T3 2024) — l'un des plus élevés de l'OCDE, influencé par l'incertitude économique.</p>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Fonction de consommation — Représentation graphique</div>
+      <div class="chart-source">Illustration théorique ; données indicatives calées sur INSEE 2024</div>
+      <canvas id="consumptionChart"></canvas>
+    </div>
+
+    <h3>3.2 Le taux d'épargne en comparaison internationale</h3>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Taux d'épargne brut des ménages (% du revenu disponible, 2024)</div>
+      <div class="chart-source">Sources : Eurostat (T2 2024) ; BEA États-Unis (2024) ; OCDE (2024)</div>
+      <canvas id="savingsChart"></canvas>
+    </div>
+
+    <h3>3.3 La théorie du cycle de vie (Modigliani)</h3>
+    <p>
+      Modigliani (1954) enrichit Keynes : les individus lissent leur consommation sur <em>l'ensemble de leur vie</em>, en empruntant jeunes, en épargnant à l'âge mûr, puis en désépargnant à la retraite.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Richesse et consommation (Modigliani)</div>
+      <div class="formula">C = α × W + β × Yd</div>
+      <div class="formula-desc">
+        W = richesse nette totale (actifs financiers + patrimoine immobilier − dettes)<br>
+        α ≈ 0,04 à 0,06 (propension à consommer la richesse)<br>
+        β ≈ 0,70 à 0,80 (propension à consommer le revenu courant)
+      </div>
+    </div>
+
+    <h3>3.4 L'hypothèse du revenu permanent (Friedman)</h3>
+    <p>
+      Pour Friedman (1957), la consommation dépend du <strong>revenu permanent</strong> — estimation du revenu moyen attendu à long terme — et non du revenu transitoire courant. Les ménages "lissent" face aux chocs temporaires.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Revenu permanent de Friedman</div>
+      <div class="formula">Yd = Yp + Yt &nbsp;|&nbsp; C = c × Yp</div>
+      <div class="formula-desc">
+        Yp = revenu permanent | Yt = revenu transitoire (choc temporaire)<br>
+        Seule une hausse perçue comme permanente modifie significativement la consommation.
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="icon">💡</div>
+      <p><strong>Implication de politique économique :</strong> une baisse temporaire des impôts aura un effet limité sur la consommation selon Friedman (car les ménages la perçoivent comme transitoire), mais un effet significatif selon Keynes. Ce débat structure les discussions sur l'efficacité des stimulus fiscaux.</p>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       PARTIE 4 · FONCTION D'INVESTISSEMENT
+  ══════════════════════════════════════════════ -->
+  <section id="investissement">
+    <div class="section-label">Partie IV</div>
+    <h2>La fonction d'investissement</h2>
+
+    <p>
+      L'investissement — mesuré par la <strong>Formation Brute de Capital Fixe (FBCF)</strong> — est la composante la plus volatile du PIB. Il représente en général <strong>20 à 25 % du PIB</strong> mais explique la majorité des fluctuations conjoncturelles.
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="number">22,9%</span>
+        <div class="label">FBCF / PIB — France (2024)</div>
+        <div class="source">INSEE – T3 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">18,7%</span>
+        <div class="label">FBCF / PIB — États-Unis (2024)</div>
+        <div class="source">BEA – T3 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">43,2%</span>
+        <div class="label">FBCF / PIB — Chine (2023)</div>
+        <div class="source">Banque mondiale, 2024</div>
+      </div>
+    </div>
+
+    <h3>4.1 L'investissement et le taux d'intérêt réel</h3>
+    <p>
+      La demande d'investissement des entreprises est une fonction <em>décroissante</em> du taux d'intérêt réel (r), qui représente le coût de financement du capital.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Fonction d'investissement néoclassique</div>
+      <div class="formula">I = I₀ − b × r</div>
+      <div class="formula-desc">
+        I₀ = investissement autonome (innovations, anticipations de profit)<br>
+        b > 0 = sensibilité de l'investissement au taux d'intérêt réel (r = i − π<sup>e</sup>)<br>
+        r = i − π<sup>e</sup> : taux d'intérêt nominal − inflation anticipée (Fisher)
+      </div>
+    </div>
+
+    <h3>4.2 L'accélérateur d'investissement</h3>
+    <p>
+      Le modèle de l'<strong>accélérateur</strong> (Clark, 1917) montre que l'investissement dépend non du niveau de la demande mais de <em>sa variation</em>. Une accélération de la croissance entraîne une augmentation proportionnellement plus forte de l'investissement.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Modèle de l'accélérateur</div>
+      <div class="formula">I<sub>t</sub> = v × (Y<sub>t</sub> − Y<sub>t−1</sub>) = v × ΔY</div>
+      <div class="formula-desc">
+        v = coefficient d'accélération (rapport capital/production) ≈ 2 à 4 empiriquement<br>
+        Si la croissance ralentit mais reste positive, l'investissement <em>diminue</em> — effet amplificateur des cycles.
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">FBCF et taux d'intérêt directeur BCE — Zone Euro (2015–2024)</div>
+      <div class="chart-source">Sources : Eurostat (FBCF) ; BCE (taux directeur) — données annuelles, fév. 2025</div>
+      <canvas id="investChart"></canvas>
+    </div>
+
+    <h3>4.3 Le q de Tobin</h3>
+    <p>
+      James Tobin (1969) propose le ratio <strong>q</strong> : rapport entre la valeur boursière du capital (capitalisation) et son coût de remplacement.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Q de Tobin</div>
+      <div class="formula">q = Valeur de marché du capital / Coût de remplacement du capital</div>
+      <div class="formula-desc">
+        q > 1 → investir est rentable (la firme vaut plus que ce qu'elle coûte à reconstruire)<br>
+        q < 1 → racheter des actifs existants est préférable à investir
+      </div>
+    </div>
+
+    <h3>4.4 Le modèle IS : équilibre sur le marché des biens</h3>
+    <p>
+      La courbe <strong>IS</strong> (Investment = Saving) représente les couples (Y, r) pour lesquels le marché des biens est en équilibre (I = S).
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Équation de la courbe IS</div>
+      <div class="formula">Y = C(Y − T) + I(r) + G + NX</div>
+      <div class="formula-desc">
+        En économie fermée : Y = C + I + G<br>
+        La pente de IS est négative : une hausse de r → baisse de I → baisse de Y<br>
+        Multiplicateur keynésien : k = 1 / (1 − c₁(1 − t))
+      </div>
+    </div>
+
+    <div class="callout red">
+      <div class="icon">🔴</div>
+      <p><strong>Paradoxe de l'épargne (Keynes) :</strong> si tous les ménages augmentent leur épargne simultanément, la demande agrégée baisse, le revenu national diminue, et l'épargne totale reste inchangée voire baisse. Ce que chaque agent fait de façon rationnelle individuellement peut être néfaste collectivement.</p>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       PARTIE 5 · MARCHÉS DU TRAVAIL & MONÉTAIRE
+  ══════════════════════════════════════════════ -->
+  <section id="marches">
+    <div class="section-label">Partie V</div>
+    <h2>Marchés du travail et marché monétaire</h2>
+
+    <h3>5.1 Le marché du travail</h3>
+
+    <h4>Offre et demande de travail</h4>
+    <p>
+      En analyse néoclassique, l'offre de travail (L<sup>s</sup>) est croissante avec le salaire réel (w/P), et la demande de travail (L<sup>d</sup>) est décroissante. L'équilibre détermine le plein-emploi.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Demande de travail (productivité marginale)</div>
+      <div class="formula">PMaL = w/P &nbsp;→&nbsp; L<sup>d</sup> = f(w/P, K, TFP)</div>
+      <div class="formula-desc">
+        PMaL = Produit Marginal du Travail<br>
+        Une entreprise embauche tant que PMaL ≥ salaire réel<br>
+        TFP = Productivité Globale des Facteurs (progrès technique)
+      </div>
+    </div>
+
+    <h4>Les formes de chômage</h4>
+    <table>
+      <thead>
+        <tr><th>Type</th><th>Définition</th><th>Cause principale</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Frictionnel</strong></td>
+          <td>Chômage lors de transitions entre emplois</td>
+          <td>Délais de recherche et d'appariement</td>
+        </tr>
+        <tr>
+          <td><strong>Structurel</strong></td>
+          <td>Inadéquation compétences/besoins</td>
+          <td>Mutations technologiques, désindustrialisation</td>
+        </tr>
+        <tr>
+          <td><strong>Conjoncturel</strong></td>
+          <td>Lié aux fluctuations du cycle économique</td>
+          <td>Insuffisance de demande globale</td>
+        </tr>
+        <tr>
+          <td><strong>Naturel (NAIRU)</strong></td>
+          <td>Niveau incompressible qui ne génère pas d'inflation</td>
+          <td>Frictionnel + structurel</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="formula-box">
+      <div class="formula-title">Loi d'Okun (empirique)</div>
+      <div class="formula">ΔU ≈ −0,5 × (g<sub>Y</sub> − g<sub>Y*</sub>)</div>
+      <div class="formula-desc">
+        ΔU = variation du taux de chômage<br>
+        g<sub>Y</sub> = croissance effective du PIB<br>
+        g<sub>Y*</sub> = croissance potentielle (≈ 1,5–2% en zone euro)<br>
+        Pour chaque point de croissance supérieur au potentiel, le chômage baisse d'environ 0,5 point.
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="number">5,8%</span>
+        <div class="label">Chômage Zone Euro (T3 2024)</div>
+        <div class="source">Eurostat – oct. 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">4,1%</span>
+        <div class="label">Chômage États-Unis (déc. 2024)</div>
+        <div class="source">BLS – jan. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">7,3%</span>
+        <div class="label">Chômage France (T3 2024)</div>
+        <div class="source">INSEE – nov. 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">2,7%</span>
+        <div class="label">Chômage Allemagne (2024)</div>
+        <div class="source">Destatis – déc. 2024</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Courbe de Phillips — Inflation vs. Chômage, Zone Euro (2014–2024)</div>
+      <div class="chart-source">Sources : Eurostat (inflation IPCH &amp; chômage BIT) — données annuelles ; calculs auteur, 2025</div>
+      <canvas id="phillipsChart"></canvas>
+    </div>
+
+    <div class="def-box">
+      <strong>Courbe de Phillips</strong><br>
+      Relation empirique inverse (Phillips, 1958) entre taux de chômage et taux d'inflation (ou de croissance des salaires). À court terme, une politique de relance peut réduire le chômage au prix d'une hausse de l'inflation. À long terme, cette relation disparaît (Friedman-Phelps, 1968) : il n'y a pas de <em>trade-off</em> permanent.
+    </div>
+
+    <h3>5.2 Le marché monétaire</h3>
+
+    <h4>La monnaie et ses fonctions</h4>
+    <p>La monnaie remplit trois fonctions : <strong>intermédiaire des échanges</strong> (facilite les transactions), <strong>unité de compte</strong> (mesure des valeurs) et <strong>réserve de valeur</strong> (stockage du pouvoir d'achat).</p>
+
+    <h4>La demande de monnaie (Keynes)</h4>
+    <p>Keynes identifie trois motifs de détention de monnaie :</p>
+    <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height: 2;">
+      <li><strong>Motif de transaction :</strong> proportionnel au revenu (L₁ = k × Y)</li>
+      <li><strong>Motif de précaution :</strong> réserve contre l'imprévu</li>
+      <li><strong>Motif de spéculation :</strong> décroissant avec le taux d'intérêt (L₂ = −h × i)</li>
+    </ul>
+
+    <div class="formula-box">
+      <div class="formula-title">Demande de monnaie (courbe LM)</div>
+      <div class="formula">M<sup>d</sup>/P = L(Y, i) = k×Y − h×i</div>
+      <div class="formula-desc">
+        M<sup>d</sup>/P = demande de monnaie réelle | k > 0 (sensibilité au revenu) | h > 0 (sensibilité au taux d'intérêt)<br>
+        L'équilibre M/P = L(Y,i) définit la courbe LM (pente positive dans l'espace Y, i)
+      </div>
+    </div>
+
+    <h4>La création monétaire</h4>
+    <p>Les banques commerciales créent de la monnaie par le crédit (<em>"loans make deposits"</em>), dans les limites fixées par les réserves obligatoires et les exigences prudentielles (Bâle III/IV).</p>
+
+    <div class="formula-box">
+      <div class="formula-title">Multiplicateur de crédit (modèle simplifié)</div>
+      <div class="formula">ΔM = (1 / r_r) × ΔReserves</div>
+      <div class="formula-desc">
+        r_r = taux de réserves obligatoires (en zone euro : 1% depuis 2012)<br>
+        En pratique, le mécanisme est contraint par la demande de crédit et les ratios prudentiels.
+      </div>
+    </div>
+
+    <h4>L'équilibre IS-LM</h4>
+    <p>
+      Le modèle <strong>IS-LM</strong> (Hicks-Hansen, 1937) articule le marché des biens (IS) et le marché monétaire (LM) pour déterminer simultanément le revenu (Y) et le taux d'intérêt (i).
+    </p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-title">Modèle IS-LM : équilibre macroéconomique</div>
+      <svg viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%;">
+        <!-- Axes -->
+        <line x1="60" y1="340" x2="520" y2="340" stroke="#333" stroke-width="1.5"/>
+        <line x1="60" y1="340" x2="60" y2="30" stroke="#333" stroke-width="1.5"/>
+        <!-- Arrow tips -->
+        <polygon points="520,336 520,344 530,340" fill="#333"/>
+        <polygon points="56,30 64,30 60,20" fill="#333"/>
+        <!-- Labels -->
+        <text x="535" y="344" font-family="Source Sans 3,sans-serif" font-size="13" fill="#333">Y</text>
+        <text x="50" y="18" font-family="JetBrains Mono,monospace" font-size="11" fill="#333">i</text>
+        <text x="40" y="346" font-family="Source Sans 3,sans-serif" font-size="11" fill="#666">0</text>
+
+        <!-- IS curve (negative slope) -->
+        <path d="M100,80 Q220,180 480,310" stroke="#1e4d8c" stroke-width="2.5" fill="none"/>
+        <text x="490" y="318" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#1e4d8c">IS</text>
+
+        <!-- LM curve (positive slope) -->
+        <path d="M100,300 Q250,200 480,110" stroke="#c8382a" stroke-width="2.5" fill="none"/>
+        <text x="488" y="108" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#c8382a">LM</text>
+
+        <!-- Equilibrium -->
+        <circle cx="285" cy="200" r="6" fill="#b8960c"/>
+        <line x1="285" y1="200" x2="285" y2="340" stroke="#b8960c" stroke-width="1" stroke-dasharray="5 4"/>
+        <line x1="60" y1="200" x2="285" y2="200" stroke="#b8960c" stroke-width="1" stroke-dasharray="5 4"/>
+        <text x="277" y="355" font-family="JetBrains Mono,monospace" font-size="11" fill="#b8960c">Y*</text>
+        <text x="20" y="204" font-family="JetBrains Mono,monospace" font-size="11" fill="#b8960c">i*</text>
+        <text x="295" y="196" font-family="Source Sans 3,sans-serif" font-size="11" fill="#b8960c">Équilibre</text>
+
+        <!-- Annotations -->
+        <text x="120" y="150" font-family="Source Sans 3,sans-serif" font-size="10" fill="#1e4d8c">↑i → ↓I → ↓Y</text>
+        <text x="330" y="260" font-family="Source Sans 3,sans-serif" font-size="10" fill="#c8382a">↑Y → ↑L<sub>d</sub>M → ↑i</text>
+      </svg>
+    </div>
+
+    <h4>La politique monétaire et les banques centrales</h4>
+    <p>
+      Les banques centrales modernes (BCE, Fed) utilisent principalement le <strong>taux directeur</strong> pour influencer l'économie. La <em>règle de Taylor</em> formalise ce comportement :
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Règle de Taylor (1993)</div>
+      <div class="formula">i<sub>t</sub> = r* + π* + 0,5×(π<sub>t</sub> − π*) + 0,5×(Y<sub>t</sub> − Y*)/Y*</div>
+      <div class="formula-desc">
+        i<sub>t</sub> = taux directeur nominal | r* = taux d'intérêt naturel | π* = cible d'inflation (2% BCE)<br>
+        (π<sub>t</sub> − π*) = écart d'inflation | (Y − Y*)/Y* = écart de production (output gap)<br>
+        Coefficients 0,5 estimés empiriquement par Taylor sur données américaines 1987–1992.
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="number">3,15%</span>
+        <div class="label">Taux dépôt BCE (déc. 2024)</div>
+        <div class="source">BCE – déc. 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">4,25–4,5%</span>
+        <div class="label">Fed Funds Rate (déc. 2024)</div>
+        <div class="source">Fed – FOMC déc. 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">−100 pb</span>
+        <div class="label">Baisses BCE en 2024 (4 baisses × 25 pb)</div>
+        <div class="source">BCE – jan. 2025</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       PARTIE 6 · MODÈLE CLASSIQUE
+  ══════════════════════════════════════════════ -->
+  <section id="classique">
+    <div class="section-label">Partie VI</div>
+    <h2>Le modèle classique</h2>
+
+    <p>
+      L'école classique (Smith, Ricardo, Say, Mill) pose les fondements d'une économie s'autorégulant via les prix flexibles et la loi des marchés. Le modèle néoclassique moderne (Walras, Pigou, Marshall) en formalise rigoureusement les mécanismes.
+    </p>
+
+    <h3>6.1 La loi de Say</h3>
+    <div class="def-box">
+      <strong>Loi de Say (1803) :</strong> « L'offre crée sa propre demande. » Tout acte de production génère des revenus (salaires, profits) dont la totalité est dépensée, assurant l'équilibre automatique des marchés. Il ne peut y avoir de surproduction durable généralisée.
+    </div>
+
+    <h3>6.2 Hypothèses fondamentales</h3>
+    <ul style="line-height: 2; margin: 0 0 1rem 1.5rem;">
+      <li><strong>Flexibilité des prix et des salaires :</strong> les marchés s'ajustent instantanément</li>
+      <li><strong>Plein-emploi :</strong> le chômage involontaire est impossible à l'équilibre</li>
+      <li><strong>Neutralité de la monnaie :</strong> la monnaie n'affecte pas les variables réelles (dichotomie classique)</li>
+      <li><strong>Théorie quantitative de la monnaie :</strong> MV = PY (Fisher, 1911)</li>
+      <li><strong>Agents rationnels :</strong> anticipations et décisions optimales</li>
+    </ul>
+
+    <div class="formula-box">
+      <div class="formula-title">Équation d'échange (Fisher, 1911)</div>
+      <div class="formula">M × V = P × Y</div>
+      <div class="formula-desc">
+        M = masse monétaire | V = vitesse de circulation (constante à court terme)<br>
+        P = niveau général des prix | Y = production réelle (PIB réel)<br>
+        → Si V et Y sont fixes, ΔM → ΔP proportionnel : l'inflation est un phénomène monétaire.
+      </div>
+    </div>
+
+    <h3>6.3 Le modèle classique : bloc par bloc</h3>
+
+    <div class="diagram-wrap">
+      <div class="diagram-title">Structure du modèle classique — Causalité verticale (dichotomie réel/monétaire)</div>
+      <svg viewBox="0 0 580 370" xmlns="http://www.w3.org/2000/svg" style="max-width:580px;width:100%;">
+        <defs>
+          <marker id="arrd" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#1e4d8c"/>
+          </marker>
+        </defs>
+        <!-- Box 1: marché du travail -->
+        <rect x="180" y="20" width="220" height="60" rx="8" fill="#1e4d8c"/>
+        <text x="290" y="46" text-anchor="middle" fill="white" font-family="Playfair Display,serif" font-size="13" font-weight="700">Marché du travail</text>
+        <text x="290" y="63" text-anchor="middle" fill="#adc8f0" font-family="Source Sans 3,sans-serif" font-size="11">L*(w/P) → Plein emploi</text>
+
+        <!-- Arrow 1 -->
+        <line x1="290" y1="80" x2="290" y2="110" stroke="#1e4d8c" stroke-width="2" marker-end="url(#arrd)"/>
+
+        <!-- Box 2: fonction de production -->
+        <rect x="180" y="115" width="220" height="60" rx="8" fill="#1a6b5a"/>
+        <text x="290" y="141" text-anchor="middle" fill="white" font-family="Playfair Display,serif" font-size="13" font-weight="700">Fonction de production</text>
+        <text x="290" y="158" text-anchor="middle" fill="#a3d8ce" font-family="Source Sans 3,sans-serif" font-size="11">Y = F(K, L*) → PIB potentiel</text>
+
+        <!-- Arrow 2 -->
+        <line x1="290" y1="175" x2="290" y2="205" stroke="#1e4d8c" stroke-width="2" marker-end="url(#arrd)"/>
+
+        <!-- Box 3: marché des biens (I=S) -->
+        <rect x="180" y="210" width="220" height="60" rx="8" fill="#b8960c"/>
+        <text x="290" y="236" text-anchor="middle" fill="white" font-family="Playfair Display,serif" font-size="13" font-weight="700">Marché des fonds prêtables</text>
+        <text x="290" y="253" text-anchor="middle" fill="#fff6cc" font-family="Source Sans 3,sans-serif" font-size="11">I(r) = S(r) → taux réel r*</text>
+
+        <!-- Arrow 3 -->
+        <line x1="290" y1="270" x2="290" y2="300" stroke="#1e4d8c" stroke-width="2" marker-end="url(#arrd)"/>
+
+        <!-- Box 4: TQM -->
+        <rect x="180" y="305" width="220" height="55" rx="8" fill="#c8382a"/>
+        <text x="290" y="328" text-anchor="middle" fill="white" font-family="Playfair Display,serif" font-size="13" font-weight="700">Théorie quantitative</text>
+        <text x="290" y="348" text-anchor="middle" fill="#f5c0bc" font-family="Source Sans 3,sans-serif" font-size="11">M×V = P×Y → niveau des prix P</text>
+
+        <!-- Labels côté gauche -->
+        <text x="30" y="55" fill="#1e4d8c" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">RÉEL</text>
+        <text x="30" y="150" fill="#1a6b5a" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">RÉEL</text>
+        <text x="30" y="245" fill="#b8960c" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">RÉEL</text>
+        <text x="30" y="338" fill="#c8382a" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">MONÉTAIRE</text>
+
+        <!-- Vertical separator -->
+        <line x1="90" y1="15" x2="90" y2="370" stroke="#ddd" stroke-width="1" stroke-dasharray="4 3"/>
+      </svg>
+    </div>
+
+    <h3>6.4 La critique keynésienne du modèle classique</h3>
+    <p>
+      Keynes critique la loi de Say : en situation d'incertitude, les agents peuvent <em>thésauriser</em> (préférence pour la liquidité), brisant la transmission du revenu en dépense. La monnaie n'est pas neutre à court terme, et les prix/salaires peuvent être rigides à la baisse (viscosité nominale).
+    </p>
+
+    <div class="callout red">
+      <div class="icon">🔴</div>
+      <p><strong>La Grande Dépression (1929–1933) :</strong> le PIB américain chuta de 30%, le chômage atteignit 25%. Cette réalité empirique dévastait le postulat classique du plein-emploi automatique et ouvrit la voie à la révolution keynésienne.</p>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       PARTIE 7 · MODÈLE KEYNÉSIEN
+  ══════════════════════════════════════════════ -->
+  <section id="keynes">
+    <div class="section-label">Partie VII</div>
+    <h2>Le modèle keynésien</h2>
+
+    <p>
+      La <em>Théorie Générale de l'Emploi, de l'Intérêt et de la Monnaie</em> (Keynes, 1936) révolutionne la macroéconomie en plaçant la <strong>demande effective</strong> — non l'offre — au cœur de la détermination du niveau d'activité et d'emploi.
+    </p>
+
+    <h3>7.1 Le principe de la demande effective</h3>
+    <div class="def-box">
+      <strong>Demande effective :</strong> niveau de production qu'anticipent de produire les entrepreneurs compte tenu de leurs prévisions de débouchés. C'est cette anticipation, et non la capacité de production, qui détermine l'emploi à court terme.
+    </div>
+
+    <p>
+      L'équilibre keynésien est atteint lorsque la production planifiée (offre) est égale aux dépenses planifiées (demande) :
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Équilibre keynésien (économie simple, sans État)</div>
+      <div class="formula">Y = C + I &nbsp;→&nbsp; Y = c₀ + c₁Y + I₀ &nbsp;→&nbsp; Y* = (c₀ + I₀)/(1 − c₁)</div>
+      <div class="formula-desc">
+        Avec État : Y* = (c₀ + I₀ + G − c₁T) / (1 − c₁)<br>
+        Avec économie ouverte : Y* = (C₀ + I₀ + G + X − c₁T − M₀) / (1 − c₁ + m)<br>
+        m = propension marginale à importer
+      </div>
+    </div>
+
+    <h3>7.2 Le multiplicateur keynésien</h3>
+    <p>
+      Le <strong>multiplicateur fiscal</strong> (k) mesure l'augmentation totale du revenu national provoquée par une augmentation unitaire des dépenses publiques autonomes.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Multiplicateur des dépenses publiques</div>
+      <div class="formula">k<sub>G</sub> = ΔY / ΔG = 1 / (1 − c₁)</div>
+      <div class="formula-desc">
+        Si c₁ = 0,8 → k<sub>G</sub> = 5 (en économie fermée, sans impôts endogènes)<br>
+        Avec taux d'imposition t : k<sub>G</sub> = 1 / (1 − c₁(1−t))<br>
+        Multiplicateur des impôts : k<sub>T</sub> = −c₁ / (1 − c₁) [négatif, moins puissant]
+      </div>
+    </div>
+
+    <div class="callout green">
+      <div class="icon">📊</div>
+      <p><strong>Débat empirique sur les multiplicateurs :</strong> Le FMI (Blanchard & Leigh, 2013) a reconnu avoir sous-estimé les multiplicateurs keynésiens pendant la crise de la zone euro (2010–2013), les estimant autour de <strong>1,5 à 1,7</strong> en période de trappe à liquidité, contre les 0,5 initialement supposés dans les programmes d'austérité.</p>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Représentation du multiplicateur keynésien — Équilibre à 45°</div>
+      <div class="chart-source">Illustration théorique ; c₁ = 0,75 ; I₀ = 200 ; ΔG = +100</div>
+      <canvas id="keynesian45Chart"></canvas>
+    </div>
+
+    <h3>7.3 La trappe à liquidité</h3>
+    <p>
+      Keynes identifie une situation dans laquelle la politique monétaire devient inefficace : lorsque les taux d'intérêt approchent zéro, les agents préfèrent détenir de la monnaie (préférence absolue pour la liquidité). Une injection monétaire ne fait que gonfler les encaisses sans stimuler l'investissement.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Trappe à liquidité — Condition</div>
+      <div class="formula">∂L/∂i → ∞ quand i → 0</div>
+      <div class="formula-desc">
+        La courbe LM devient horizontale. L'efficacité de la politique monétaire s'annule.<br>
+        La politique budgétaire retrouve alors toute son efficacité (multiplicateur plein sans effet d'éviction).
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <div class="icon">💡</div>
+      <p><strong>Pertinence contemporaine :</strong> La zone euro a connu une trappe à liquidité quasi-effective de 2014 à 2021, avec des taux directeurs proches de zéro ou négatifs (le taux de dépôt BCE était à −0,5 % en 2019–2021). La BCE a dû recourir à des outils non conventionnels : QE (Quantitative Easing), LTRO, forward guidance.</p>
+    </div>
+
+    <h3>7.4 Le modèle AS-AD (Offre et Demande Agrégées)</h3>
+    <p>
+      L'extension dynamique du cadre keynésien est le modèle <strong>AS-AD</strong> (Aggregate Supply / Aggregate Demand), représenté dans l'espace (Y, P).
+    </p>
+
+    <div class="diagram-wrap">
+      <div class="diagram-title">Courbes AS (Offre agrégée) et AD (Demande agrégée)</div>
+      <svg viewBox="0 0 560 380" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%;">
+        <defs>
+          <marker id="arre" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+          </marker>
+        </defs>
+        <!-- Axes -->
+        <line x1="60" y1="330" x2="520" y2="330" stroke="#333" stroke-width="1.5" marker-end="url(#arre)"/>
+        <line x1="60" y1="330" x2="60" y2="30" stroke="#333" stroke-width="1.5" marker-end="url(#arre)"/>
+        <text x="525" y="335" font-family="Source Sans 3,sans-serif" font-size="13" fill="#333">Y</text>
+        <text x="48" y="25" font-family="JetBrains Mono,monospace" font-size="11" fill="#333">P</text>
+        <text x="38" y="334" font-family="Source Sans 3,sans-serif" font-size="11" fill="#666">0</text>
+
+        <!-- AD curve (negative slope) -->
+        <path d="M100,60 Q280,200 490,310" stroke="#1e4d8c" stroke-width="2.5" fill="none"/>
+        <text x="500" y="318" font-family="Playfair Display,serif" font-size="13" font-weight="700" fill="#1e4d8c">AD</text>
+
+        <!-- AS short-run (positive slope) -->
+        <path d="M100,280 Q270,180 420,80" stroke="#c8382a" stroke-width="2.5" fill="none"/>
+        <text x="430" y="78" font-family="Playfair Display,serif" font-size="13" font-weight="700" fill="#c8382a">AS<tspan font-size="10" dy="3">CT</tspan></text>
+
+        <!-- AS long-run (vertical) -->
+        <line x1="310" y1="40" x2="310" y2="325" stroke="#1a6b5a" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <text x="315" y="38" font-family="Playfair Display,serif" font-size="13" font-weight="700" fill="#1a6b5a">AS<tspan font-size="10" dy="3">LT</tspan></text>
+        <text x="295" y="345" font-family="JetBrains Mono,monospace" font-size="10" fill="#1a6b5a">Y*</text>
+
+        <!-- Equilibrium -->
+        <circle cx="267" cy="196" r="6" fill="#b8960c"/>
+        <line x1="267" y1="196" x2="267" y2="330" stroke="#b8960c" stroke-width="1" stroke-dasharray="4 3"/>
+        <line x1="60" y1="196" x2="267" y2="196" stroke="#b8960c" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="255" y="348" font-family="JetBrains Mono,monospace" font-size="10" fill="#b8960c">Y₀</text>
+        <text x="20" y="200" font-family="JetBrains Mono,monospace" font-size="10" fill="#b8960c">P₀</text>
+
+        <!-- Annotation gap -->
+        <text x="320" y="210" font-family="Source Sans 3,sans-serif" font-size="10" fill="#555">Écart de</text>
+        <text x="320" y="222" font-family="Source Sans 3,sans-serif" font-size="10" fill="#555">production</text>
+        <line x1="267" y1="196" x2="310" y2="196" stroke="#555" stroke-width="1" stroke-dasharray="3 2"/>
+      </svg>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Modèle Classique</th><th>Modèle Keynésien</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Horizon</strong></td><td>Long terme</td><td>Court terme</td></tr>
+        <tr><td><strong>Flexibilité des prix</strong></td><td>Parfaite (instantanée)</td><td>Rigide à la baisse</td></tr>
+        <tr><td><strong>Chômage</strong></td><td>Volontaire uniquement</td><td>Involontaire possible</td></tr>
+        <tr><td><strong>Déterminant de Y</strong></td><td>Offre (facteurs de prod.)</td><td>Demande effective</td></tr>
+        <tr><td><strong>Neutralité monétaire</strong></td><td>Oui (long terme)</td><td>Non (court terme)</td></tr>
+        <tr><td><strong>Politique budgétaire</strong></td><td>Inefficace (éviction totale)</td><td>Efficace (multiplicateur)</td></tr>
+        <tr><td><strong>Politique monétaire</strong></td><td>→ Prix uniquement</td><td>Efficace (sauf trappe à liq.)</td></tr>
+        <tr><td><strong>Courbe AS</strong></td><td>Verticale (Y = Y*)</td><td>Horizontale (Keynes strict) ou + pente</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       PARTIE 8 · ENJEUX 2026
+  ══════════════════════════════════════════════ -->
+  <section id="enjeux">
+    <div class="section-label">Partie VIII <span class="badge">Actuel · 2026</span></div>
+    <h2>Enjeux macroéconomiques du XXI<sup>e</sup> siècle — focus début 2026</h2>
+
+    <p>
+      La macroéconomie du XXI<sup>e</sup> siècle est confrontée à des défis inédits qui bouleversent les cadres traditionnels : désinflation structurelle puis retour de l'inflation, économie verte, inégalités croissantes, révolution numérique et intelligence artificielle, et instabilité géopolitique croissante.
+    </p>
+
+    <h3>8.1 Le contexte macroéconomique en ce début 2026</h3>
+
+    <div class="callout green">
+      <div class="icon">🌍</div>
+      <p><strong>Bilan 2025 et projection 2026 :</strong> Selon les Perspectives de l'Économie Mondiale du FMI (janvier 2025), la croissance mondiale pour 2025 et 2026 est attendue à <strong>3,3 %</strong> par an — en dessous de la moyenne pré-pandémie (2000–2019 : 3,8 %). L'économie mondiale entre dans une phase de « croissance lente » ou <em>Slow Growth Regime</em>.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="number">3,3%</span>
+        <div class="label">Croissance mondiale prévue 2025–2026</div>
+        <div class="source">FMI – WEO Jan. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">1,0%</span>
+        <div class="label">Croissance Zone Euro 2025 (prev.)</div>
+        <div class="source">BCE – Proj. déc. 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">2,7%</span>
+        <div class="label">Croissance USA 2025 (prev.)</div>
+        <div class="source">FMI – Jan. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">4,6%</span>
+        <div class="label">Croissance Inde 2025 (prev.)</div>
+        <div class="source">FMI – Jan. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">4,5%</span>
+        <div class="label">Croissance Chine 2025 (prev.)</div>
+        <div class="source">FMI – Jan. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">0,3%</span>
+        <div class="label">Croissance Allemagne 2025 (prev.)</div>
+        <div class="source">FMI – Jan. 2025</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Croissance du PIB réel — Projection 2025–2026 par région</div>
+      <div class="chart-source">Sources : FMI – World Economic Outlook Update, janvier 2025 ; BCE – Projections macroéconomiques décembre 2024</div>
+      <canvas id="projectionChart"></canvas>
+    </div>
+
+    <h3>8.2 Le retour et la normalisation de l'inflation</h3>
+    <p>
+      Après le pic d'inflation de 2022 (10,6 % en zone euro, 9,1 % aux États-Unis), la désinflation s'est poursuivie en 2023–2024. En début 2026, l'inflation semble se rapprocher des cibles des banques centrales — mais avec des risques persistants.
+    </p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="year">2021</div>
+        <p>Début de l'inflation post-COVID : chocs d'offre (ruptures logistiques), stimulus budgétaires massifs. Inflation USA : 7% en déc. 2021 (BLS).</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2022</div>
+        <p>Invasion russe de l'Ukraine → choc énergétique. Inflation Zone Euro : 10,6% en oct. 2022 — record historique depuis l'euro (Eurostat, 2022). Fed commence cycle de hausse de taux (+500 pb en 18 mois).</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2023–2024</div>
+        <p>Désinflation : baisse des prix de l'énergie, normalisation des chaînes d'approvisionnement. BCE effectue 4 baisses de taux en 2024 (−100 pb). Inflation "cœur" (hors énergie/alim.) reste résistante à 2,7% en zone euro (Eurostat, déc. 2024).</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2025–2026</div>
+        <p>La BCE vise le retour à 2% en 2025 (Proj. déc. 2024). Risques : regain inflationniste lié aux droits de douane américains, tensions géopolitiques, et transition énergétique (prix du carbone, coûts des énergies renouvelables).</p>
+      </div>
+    </div>
+
+    <h3>8.3 Les politiques budgétaires sous contrainte — La soutenabilité de la dette</h3>
+    <p>
+      La pandémie de COVID-19 a provoqué une explosion des dettes publiques mondiales. En début 2026, la soutenabilité budgétaire est un enjeu majeur, en particulier en zone euro.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Condition de soutenabilité de la dette publique (Domar)</div>
+      <div class="formula">Δ(d) = (r − g) × d − s</div>
+      <div class="formula-desc">
+        d = ratio dette/PIB | r = taux d'intérêt réel | g = croissance réelle | s = solde primaire (% PIB)<br>
+        Si r > g : la dette est explosive sans excédent primaire suffisant<br>
+        Si r &lt; g (condition favorable) : la dette peut se stabiliser même avec un léger déficit primaire
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="number">120%</span>
+        <div class="label">Dette publique France / PIB (2024)</div>
+        <div class="source">INSEE/DGFiP – oct. 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">134%</span>
+        <div class="label">Dette publique Italie / PIB (2024)</div>
+        <div class="source">Eurostat – T2 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">122%</span>
+        <div class="label">Dette publique USA / PIB (2024)</div>
+        <div class="source">FMI – WEO Oct. 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">250%</span>
+        <div class="label">Dette publique Japon / PIB (2024)</div>
+        <div class="source">FMI – WEO Oct. 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">63%</span>
+        <div class="label">Dette publique Allemagne / PIB (2024)</div>
+        <div class="source">Eurostat – T2 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">93%</span>
+        <div class="label">Dette publique mondiale moy. / PIB (2024)</div>
+        <div class="source">FMI – Fiscal Monitor Oct. 2024</div>
+      </div>
+    </div>
+
+    <div class="callout red">
+      <div class="icon">⚠️</div>
+      <p><strong>Risque France 2025–2026 :</strong> Le déficit public français a atteint <strong>6,1 % du PIB</strong> en 2024 (INSEE, mars 2025), très au-delà des 3 % du Pacte de Stabilité. Le gouvernement vise un retour sous 5 % en 2025, mais les agences de notation et les marchés obligataires scrutent attentivement la trajectoire budgétaire. L'écart (spread) OAT-Bund a atteint 80–85 points de base en fin 2024.</p>
+    </div>
+
+    <h3>8.4 L'intelligence artificielle et le choc de productivité</h3>
+    <p>
+      L'essor de l'IA générative (ChatGPT, modèles multimodaux) depuis 2023 suscite des anticipations de gains de productivité comparables aux grandes révolutions industrielles — mais aussi des craintes de destructions d'emplois massives.
+    </p>
+
+    <table>
+      <thead>
+        <tr><th>Estimation</th><th>Chiffre</th><th>Source</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Gain de productivité potentiel (IA, à 10 ans)</td>
+          <td>+0,3 à +1,0 pp/an de croissance mondiale</td>
+          <td>FMI – Jan. 2024</td>
+        </tr>
+        <tr>
+          <td>Emplois exposés à l'automatisation IA (OCDE)</td>
+          <td>27 % des emplois dans les pays avancés</td>
+          <td>OCDE – Perspectives Emploi 2023</td>
+        </tr>
+        <tr>
+          <td>Impact économique IA générative (annuel, long terme)</td>
+          <td>2,6 à 4,4 billions $ / an</td>
+          <td>McKinsey Global Institute, 2023</td>
+        </tr>
+        <tr>
+          <td>Investissements mondiaux en IA (2024)</td>
+          <td>> 300 milliards $</td>
+          <td>Stanford AI Index Report, 2025</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>8.5 La transition écologique comme enjeu macroéconomique</h3>
+    <p>
+      Les coûts et bénéfices de la transition vers une économie bas-carbone restructurent profondément les modèles macroéconomiques traditionnels. Le rapport <em>Stern</em> (2006) estimait le coût de l'inaction climatique à <strong>5 à 20 % du PIB mondial</strong> à long terme, contre <strong>1 à 2 % du PIB</strong> par an pour la mitigation.
+    </p>
+
+    <div class="formula-box">
+      <div class="formula-title">Coût social du carbone (SCC)</div>
+      <div class="formula">SCC = Σ [Dommages climatiques futurs actualisés par tonne de CO₂ émise]</div>
+      <div class="formula-desc">
+        Estimation US EPA (2023) : 190 $ / tonne de CO₂ (contre 51 $ dans la précédente estimation de 2021)<br>
+        La France : prix tutélaire du carbone = 250 € / tCO₂ en 2030 (France Stratégie, 2022)
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="number">3 000 Mds$</span>
+        <div class="label">Investissements verts nécessaires / an (monde, 2030)</div>
+        <div class="source">AIE – World Energy Outlook 2024</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">55€/tCO₂</span>
+        <div class="label">Prix du carbone EU ETS (jan. 2025)</div>
+        <div class="source">ICE/EEX – jan. 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="number">369 Mds$</span>
+        <div class="label">IRA américain (Inflation Reduction Act) sur 10 ans</div>
+        <div class="source">CBO – 2022</div>
+      </div>
+    </div>
+
+    <h3>8.6 Les inégalités et la stagnation séculaire</h3>
+    <p>
+      L'hypothèse de <strong>stagnation séculaire</strong> (Hansen, 1938 ; Summers, 2014) suggère que les économies avancées sont structurellement confrontées à un excès d'épargne sur l'investissement, entraînant un taux d'intérêt naturel (r*) très bas voire négatif.
+    </p>
+
+    <div class="callout">
+      <div class="icon">📈</div>
+      <p><strong>Piketty et la dynamique des inégalités :</strong> <em>Le Capital au XXIe siècle</em> (Piketty, 2013) montre que lorsque r > g (rendement du capital > croissance), la part des revenus du capital dans le PIB augmente, accroissant les inégalités. Ce phénomène a été particulièrement visible depuis 2010. En 2024, les 1 % les plus riches détiennent environ <strong>43 % des richesses mondiales</strong> (Oxfam/Credit Suisse Global Wealth Report 2024).</p>
+    </div>
+
+    <h3>8.7 Fragmentations géopolitiques et enjeux commerciaux (2025–2026)</h3>
+    <p>
+      Le retour au protectionnisme (droits de douane Trump 2025, réorganisation des chaînes de valeur) et la fragmentation géopolitique (découplage USA-Chine, guerre en Ukraine) créent un nouveau contexte macroéconomique : un monde multipolaire où le libre-échange n'est plus acquis.
+    </p>
+
+    <table>
+      <thead>
+        <tr><th>Risque</th><th>Impact macroéco. estimé</th><th>Source</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Fragmentation commerciale mondiale (scénario sévère)</td>
+          <td>−7 % du PIB mondial à LT</td>
+          <td>FMI – WEO Oct. 2023</td>
+        </tr>
+        <tr>
+          <td>Droits de douane américains universels 10–25 % (2025)</td>
+          <td>−0,4 à −0,8 % PIB zone euro</td>
+          <td>BCE – Economic Bulletin, déc. 2024</td>
+        </tr>
+        <tr>
+          <td>Coût macroéco. guerre en Ukraine pour l'Europe</td>
+          <td>−1,5 % PIB UE cumulé 2022–2024</td>
+          <td>Bruegel / FMI, 2024</td>
+        </tr>
+        <tr>
+          <td>Réindustrialisation (friend-shoring) : coût supplémentaire</td>
+          <td>+1 à 2 pp d'inflation à MT</td>
+          <td>BIS Annual Report, 2023</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Principaux risques macroéconomiques mondiaux en 2025–2026</div>
+      <div class="chart-source">Sources : FMI – WEO Oct./Jan. 2025 ; BCE ; OCDE Economic Outlook Nov. 2024</div>
+      <canvas id="risksChart"></canvas>
+    </div>
+
+    <h3>8.8 Synthèse des enjeux : vers une nouvelle macroéconomie ?</h3>
+    <p>
+      Les crises récentes (2008–2009, COVID-2020, inflation 2022) ont conduit à une révision profonde des cadres macroéconomiques standards. Plusieurs tendances émergent :
+    </p>
+
+    <div class="model-grid">
+      <div class="model-card classical">
+        <div class="model-header">Nouveaux consensus</div>
+        <div class="model-body">
+          <ul>
+            <li>Ciblage d'inflation (IT) par les banques centrales comme ancre nominale</li>
+            <li>Reconnaissance du rôle stabilisateur des politiques budgétaires (FMI, 2020)</li>
+            <li>Outils macroprudentiels contre la pro-cyclicité financière</li>
+            <li>Taux naturel r* structurellement bas dans les économies avancées</li>
+          </ul>
+        </div>
+      </div>
+      <div class="model-card keynesian">
+        <div class="model-header">Débats ouverts</div>
+        <div class="model-body">
+          <ul>
+            <li>MMT (Modern Monetary Theory) : l'État émetteur de sa monnaie peut-il emprunter sans limite ?</li>
+            <li>Politique industrielle et État stratège : retour en grâce ?</li>
+            <li>Compatibilité croissance/objectifs climatiques (PIB vert)</li>
+            <li>Fiscalité du capital et IA : comment taxer la rente algorithmique ?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <div class="icon">✅</div>
+      <p><strong>Message de conclusion :</strong> La macroéconomie n'est pas une science figée. Les grands chocs (1929, 1973, 2008, 2020, 2022) ont à chaque fois reconfiguré les théories, les institutions et les politiques. En 2026, le défi central est de concilier <em>stabilité des prix, croissance inclusive, soutenabilité budgétaire et transition écologique</em> — un quadrilemme inédit que les modèles classiques et keynésiens, pris isolément, ne peuvent pleinement appréhender.</p>
+    </div>
+  </section>
+
+</div><!-- /container -->
+
+<footer>
+  <p><strong>Cours de Macroéconomie</strong> · Niveau Licence / Master · Mis à jour : mars 2026</p>
+  <p style="margin-top:0.5rem; opacity:0.6; font-size:0.78rem;">
+    Sources principales : FMI (WEO oct. 2024, jan. 2025) · Eurostat · INSEE · BCE · BLS · Banque mondiale ·
+    OCDE · BIS · Keynes (1936) · Friedman (1957, 1968) · Modigliani (1954) · Tobin (1969) · Taylor (1993) · Piketty (2013)
+  </p>
+</footer>
+
+
+<!-- ══════════════ CHARTS ══════════════ -->
+<script>
+const COLORS = {
+  blue: '#1e4d8c',
+  teal: '#1a6b5a',
+  red: '#c8382a',
+  gold: '#b8960c',
+  purple: '#6b3fa0',
+  orange: '#e07020',
+  lightBlue: '#a8c4e0',
+  lightTeal: '#8ecdc2',
+  lightRed: '#e8a0a0',
+  lightGold: '#e0c870',
+  gray: '#888',
+};
+
+Chart.defaults.font.family = "'Source Sans 3', sans-serif";
+Chart.defaults.color = '#444';
+Chart.defaults.plugins.legend.labels.padding = 16;
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+
+// ── 1. GDP Growth Chart ──
+new Chart(document.getElementById('gdpGrowthChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
+    datasets: [
+      { label: 'Monde', data: [2.8, -3.1, 6.1, 3.5, 3.1, 3.2], backgroundColor: COLORS.blue },
+      { label: 'États-Unis', data: [2.3, -2.8, 5.9, 2.1, 2.5, 2.8], backgroundColor: COLORS.teal },
+      { label: 'Zone Euro', data: [1.6, -6.4, 5.3, 3.4, 0.5, 1.1], backgroundColor: COLORS.red },
+      { label: 'France', data: [1.8, -7.9, 6.8, 2.5, 0.9, 1.1], backgroundColor: COLORS.gold },
+      { label: 'Chine', data: [6.0, 2.2, 8.4, 3.0, 5.2, 4.8], backgroundColor: COLORS.purple },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { title: { display: true, text: '% de croissance réelle' }, grid: { color: '#f0eeea' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ── 2. Inflation Chart ──
+new Chart(document.getElementById('inflationChart'), {
+  type: 'line',
+  data: {
+    labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
+    datasets: [
+      {
+        label: 'Zone Euro (IPCH)',
+        data: [1.2, 0.3, 2.6, 8.4, 5.4, 2.4],
+        borderColor: COLORS.blue, backgroundColor: 'rgba(30,77,140,0.1)',
+        fill: true, tension: 0.4, pointRadius: 5
+      },
+      {
+        label: 'États-Unis (IPC)',
+        data: [2.3, 1.2, 4.7, 8.0, 4.1, 2.9],
+        borderColor: COLORS.red, backgroundColor: 'rgba(200,56,42,0.08)',
+        fill: true, tension: 0.4, pointRadius: 5
+      },
+      {
+        label: 'France (IPC)',
+        data: [1.1, 0.5, 1.6, 5.9, 4.9, 1.3],
+        borderColor: COLORS.gold, backgroundColor: 'rgba(184,150,12,0.08)',
+        fill: false, tension: 0.4, pointRadius: 5, borderDash: [5, 3]
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      annotation: {}
+    },
+    scales: {
+      y: {
+        title: { display: true, text: 'Inflation annuelle (%)' },
+        grid: { color: '#f0eeea' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ── 3. Consumption Chart ──
+new Chart(document.getElementById('consumptionChart'), {
+  type: 'line',
+  data: {
+    labels: [0, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000],
+    datasets: [
+      {
+        label: 'C = 500 + 0.75·Yd (Keynes)',
+        data: [500, 4250, 8000, 11750, 15500, 19250, 23000, 26750, 30500],
+        borderColor: COLORS.blue, fill: false, tension: 0, pointRadius: 0, borderWidth: 2.5
+      },
+      {
+        label: 'Ligne de 45° (C = Yd)',
+        data: [0, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000],
+        borderColor: COLORS.gray, fill: false, tension: 0, pointRadius: 0,
+        borderWidth: 1.5, borderDash: [6, 4]
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('fr-FR')} €`
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Revenu disponible Yd (€)' }, grid: { display: false } },
+      y: { title: { display: true, text: 'Consommation C (€)' }, grid: { color: '#f0eeea' } }
+    }
+  }
+});
+
+// ── 4. Savings Chart ──
+new Chart(document.getElementById('savingsChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Suisse', 'Pays-Bas', 'Allemagne', 'France', 'Italie', 'Espagne', 'Royaume-Uni', 'États-Unis', 'Japon'],
+    datasets: [{
+      label: 'Taux d\'épargne brut (%)',
+      data: [22.1, 20.4, 18.8, 18.2, 12.6, 10.8, 9.4, 5.1, 15.4],
+      backgroundColor: [
+        COLORS.blue, COLORS.teal, COLORS.orange, COLORS.gold, COLORS.red,
+        COLORS.purple, COLORS.gray, COLORS.lightBlue, COLORS.lightTeal
+      ].map(c => c + 'cc'),
+      borderColor: [
+        COLORS.blue, COLORS.teal, COLORS.orange, COLORS.gold, COLORS.red,
+        COLORS.purple, COLORS.gray, COLORS.lightBlue, COLORS.lightTeal
+      ],
+      borderWidth: 1.5
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { title: { display: true, text: '% du revenu disponible brut' }, grid: { color: '#f0eeea' } },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// ── 5. Investment & Rate Chart ──
+new Chart(document.getElementById('investChart'), {
+  type: 'line',
+  data: {
+    labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+    datasets: [
+      {
+        label: 'FBCF Zone Euro (% du PIB)',
+        data: [21.0, 21.3, 21.8, 22.2, 22.5, 21.8, 22.9, 23.2, 22.9, 22.8],
+        borderColor: COLORS.blue, fill: false, tension: 0.4,
+        yAxisID: 'y', pointRadius: 4
+      },
+      {
+        label: 'Taux dépôt BCE (%)',
+        data: [-0.3, -0.4, -0.4, -0.4, -0.5, -0.5, -0.5, 1.5, 4.0, 3.15],
+        borderColor: COLORS.red, fill: false, tension: 0.4,
+        yAxisID: 'y1', borderDash: [4, 3], pointRadius: 4
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: {
+        type: 'linear', position: 'left',
+        title: { display: true, text: 'FBCF (% PIB)' },
+        grid: { color: '#f0eeea' }
+      },
+      y1: {
+        type: 'linear', position: 'right',
+        title: { display: true, text: 'Taux BCE (%)' },
+        grid: { drawOnChartArea: false }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ── 6. Phillips Curve ──
+new Chart(document.getElementById('phillipsChart'), {
+  type: 'scatter',
+  data: {
+    datasets: [{
+      label: 'Données Zone Euro (2014–2024)',
+      data: [
+        { x: 11.6, y: 0.4 },   // 2014
+        { x: 10.9, y: 0.0 },   // 2015
+        { x: 10.0, y: 0.2 },   // 2016
+        { x: 9.1, y: 1.5 },    // 2017
+        { x: 8.2, y: 1.8 },    // 2018
+        { x: 7.5, y: 1.2 },    // 2019
+        { x: 8.0, y: 0.3 },    // 2020
+        { x: 7.7, y: 2.6 },    // 2021
+        { x: 6.8, y: 8.4 },    // 2022
+        { x: 6.1, y: 5.4 },    // 2023
+        { x: 5.8, y: 2.4 },    // 2024
+      ],
+      backgroundColor: COLORS.blue + 'cc',
+      borderColor: COLORS.blue,
+      pointRadius: 7,
+      pointHoverRadius: 9
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` Chômage : ${ctx.parsed.x}% | Inflation : ${ctx.parsed.y}%`
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Taux de chômage (%)' }, grid: { color: '#f0eeea' } },
+      y: { title: { display: true, text: 'Inflation IPCH (%)' }, grid: { color: '#f0eeea' } }
+    }
+  }
+});
+
+// ── 7. Keynesian 45-degree chart ──
+new Chart(document.getElementById('keynesian45Chart'), {
+  type: 'line',
+  data: {
+    labels: [0, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000],
+    datasets: [
+      {
+        label: '45° : Y = Dépenses planifiées',
+        data: [0, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000],
+        borderColor: COLORS.gray, fill: false, pointRadius: 0,
+        borderWidth: 1.5, borderDash: [6, 4]
+      },
+      {
+        label: 'Dépenses : D = 300 + 0.75Y (avant ΔG)',
+        data: [300, 450, 600, 750, 900, 1050, 1200, 1350, 1500, 1650, 1800],
+        borderColor: COLORS.blue, fill: false, tension: 0, pointRadius: 0, borderWidth: 2.5
+      },
+      {
+        label: 'Dépenses : D\' = 400 + 0.75Y (après ΔG = +100)',
+        data: [400, 550, 700, 850, 1000, 1150, 1300, 1450, 1600, 1750, 1900],
+        borderColor: COLORS.teal, fill: false, tension: 0, pointRadius: 0,
+        borderWidth: 2.5, borderDash: [4, 2]
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      x: { title: { display: true, text: 'Production Y' }, grid: { display: false } },
+      y: { title: { display: true, text: 'Dépenses agrégées' }, grid: { color: '#f0eeea' } }
+    }
+  }
+});
+
+// ── 8. Projection Chart ──
+new Chart(document.getElementById('projectionChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Monde', 'États-Unis', 'Zone Euro', 'France', 'Allemagne', 'Chine', 'Inde', 'Brésil'],
+    datasets: [
+      {
+        label: 'Croissance 2024 (réalisée)',
+        data: [3.2, 2.8, 1.1, 1.1, -0.2, 4.8, 6.8, 3.0],
+        backgroundColor: COLORS.blue + 'bb'
+      },
+      {
+        label: 'Prévision 2025',
+        data: [3.3, 2.7, 1.0, 0.8, 0.3, 4.5, 6.5, 2.2],
+        backgroundColor: COLORS.teal + 'bb'
+      },
+      {
+        label: 'Prévision 2026',
+        data: [3.3, 2.1, 1.4, 1.0, 1.0, 4.5, 6.5, 2.5],
+        backgroundColor: COLORS.gold + 'bb'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { title: { display: true, text: '% croissance du PIB réel' }, grid: { color: '#f0eeea' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ── 9. Risks Radar ──
+new Chart(document.getElementById('risksChart'), {
+  type: 'radar',
+  data: {
+    labels: [
+      'Fragmentation géopolitique',
+      'Endettement public',
+      'Inflation résiduelle',
+      'Choc IA / disruption emploi',
+      'Risques climatiques',
+      'Instabilité financière',
+      'Ralentissement Chine'
+    ],
+    datasets: [
+      {
+        label: 'Probabilité risque (0–10)',
+        data: [7.5, 7.0, 5.5, 6.0, 8.0, 5.5, 7.0],
+        borderColor: COLORS.red, backgroundColor: 'rgba(200,56,42,0.15)',
+        pointBackgroundColor: COLORS.red, pointRadius: 5
+      },
+      {
+        label: 'Impact potentiel (0–10)',
+        data: [8.0, 7.5, 5.0, 7.5, 9.0, 7.0, 7.5],
+        borderColor: COLORS.blue, backgroundColor: 'rgba(30,77,140,0.1)',
+        pointBackgroundColor: COLORS.blue, pointRadius: 5,
+        borderDash: [4, 2]
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      r: {
+        min: 0, max: 10,
+        ticks: { stepSize: 2 },
+        grid: { color: '#e8e4dc' },
+        angleLines: { color: '#e8e4dc' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
